@@ -45,11 +45,32 @@ CodeConnect is a real-time collaborative code editing platform that enables mult
    ```
 
 4. Set up environment variables:
-   Create a `.env` file in the backend directory with:
+   Create a `.env` file in the backend directory with the following variables (adjust for your deployment environment):
+
    ```
-   MONGODB_URI=your_mongodb_connection_string
-   PORT=5000
+   # Database
+   MONGODB_URI=your_mongodb_connection_string  # e.g., mongodb+srv://username:password@cluster.mongodb.net/codeconnect?retryWrites=true&w=majority (for MongoDB Atlas)
+
+   # Server
+   PORT=5000  # Port for the backend server (use 80/443 for production without proxy)
+
+   # Frontend
+   FRONTEND_URL=http://localhost:3000  # Update to your production frontend URL for CORS (e.g., https://yourdomain.com)
+
+   # Environment
+   NODE_ENV=development  # Set to 'production' for deployment
+
+   # Optional: For production security
+   SESSION_SECRET=your_session_secret  # If implementing sessions
+   JWT_SECRET=your_jwt_secret  # If using JWT authentication
    ```
+
+   **Deployment Notes:**
+   - For production, use a secure MongoDB URI (e.g., MongoDB Atlas) and ensure your IP is whitelisted.
+   - Update `FRONTEND_URL` in the backend's Socket.IO CORS configuration to match your deployed frontend.
+   - Use HTTPS in production for secure WebSocket connections.
+   - For platforms like Heroku, Vercel, or Render, set these as environment variables in the dashboard instead of a local .env file.
+   - Ensure `NODE_ENV=production` to disable development features like verbose logging.
 
 5. Start the backend:
    ```bash
