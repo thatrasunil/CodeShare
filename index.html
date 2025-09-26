@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Realtime CodeShare Demo</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="styles.css">
+  <!-- Firebase modular SDK (ES modules) -->
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
+</head>
+<body>
+  <header>
+    <strong>CodeShare — Realtime HTML/CSS/JS</strong>
+    <div class="controls">
+      <button id="createRoomBtn">Create Room</button>
+      <input id="roomInput" placeholder="Enter room id or URL" />
+      <button id="joinBtn">Join</button>
+      <span class="small" id="status">Not connected</span>
+    </div>
+    <div style="margin-left:auto" class="meta">
+      <span class="small" id="roomLabel"></span>
+      <span class="small" id="usersCount"></span>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="main-content">
+      <div class="pane editors-pane">
+        <div class="room-controls">
+          <button id="runBtn">Run Preview</button>
+          <button id="shareBtn">Copy Link</button>
+          <span class="small" id="userStatus">Users: <span id="usersCount">1</span></span>
+        </div>
+        <div class="editors">
+          <div class="editor-section">
+            <label class="small">HTML</label>
+            <textarea id="htmlEditor" placeholder="Type HTML here..."><h1>Hello CodeShare!</h1></textarea>
+          </div>
+          <div class="editor-section">
+            <label class="small">CSS</label>
+            <textarea id="cssEditor" placeholder="Type CSS here...">body { font-family: system-ui; padding: 20px; background: #f0f0f0; }</textarea>
+          </div>
+          <div class="editor-section">
+            <label class="small">JavaScript</label>
+            <textarea id="jsEditor" placeholder="Type JavaScript here...">console.log('Welcome to real-time collaboration!');</textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="pane preview-pane">
+        <label class="small">Live Preview</label>
+        <iframe id="preview" class="preview"></iframe>
+      </div>
+    </div>
+
+    <div class="chat-pane">
+      <div class="chat-header">
+        <h3>Chat <span id="chatUsers">(1 online)</span></h3>
+        <button id="toggleChat">−</button>
+      </div>
+      <div id="chatMessages" class="chat-messages"></div>
+      <div class="chat-input-container">
+        <input id="messageInput" placeholder="Type a message... (add emojis!)" />
+        <div class="emoji-picker">
+          <button type="button" onclick="addEmoji('😊')">😊</button>
+          <button type="button" onclick="addEmoji('👍')">👍</button>
+          <button type="button" onclick="addEmoji('🚀')">🚀</button>
+          <button type="button" onclick="addEmoji('💡')">💡</button>
+        </div>
+        <button id="sendMessage">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
