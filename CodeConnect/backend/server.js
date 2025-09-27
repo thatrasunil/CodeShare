@@ -12,14 +12,14 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: ["http://localhost:3000", "http://localhost:3001"], // Frontend URL
+    origin: ["http://localhost:3000", "http://localhost:3001", "https://codeconnect-zeta-pied.vercel.app"], // Frontend URL
     methods: ["GET", "POST"]
   }
 });
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('../frontend/build')); // Serve React build later
+// app.use(express.static('../frontend/build')); // Serve React build later - commented for separate deployment
 
 // Multer setup for file uploads
 const storage = multer.diskStorage({
@@ -36,13 +36,21 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/codeconnect', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.log(err));
+async function connectDB() {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/codeconnect', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('MongoDB connected successfully');
+  } catch (err) {
+    console.error('MongoDB connection error:', err.message);
+    console.log('Server will start without DB - features limited to in-memory only.');
+  }
+}
+
+// Call connectDB before starting server
+connectDB();
 
 // Room Schema
 const roomSchema = new mongoose.Schema({
