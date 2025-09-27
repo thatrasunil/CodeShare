@@ -3,6 +3,9 @@ const http = require('http');
 const socketIo = require('socket.io');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
@@ -17,6 +20,21 @@ const io = socketIo(server, {
 app.use(cors());
 app.use(express.json());
 app.use(express.static('../frontend/build')); // Serve React build later
+
+// Multer setup for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadDir = path.join(__dirname, 'uploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir);
+    }
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage });
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/codeconnect', {
@@ -33,7 +51,10 @@ const roomSchema = new mongoose.Schema({
   language: { type: String, default: 'javascript' },
   messages: [{
     userId: String,
-    message: String,
+    content: String,
+    type: { type: String, enum: ['text', 'voice', 'file'], default: 'text' },
+    fileUrl: String,
+    duration: Number,
     timestamp: { type: Date, default: Date.now }
   }],
   users: [{ userId: String, joinedAt: { type: Date, default: Date.now } }],
@@ -133,8 +154,8 @@ io.on('connection', (socket) => {
 
   // Chat Message
   socket.on('send-message', async (data) => {
-    const { roomId, id, message, userId } = data;
-    const newMessage = { id, userId, message, timestamp: new Date() };
+    const { roomId, id, content, userId, type = 'text', fileUrl, duration } = data;
+    const newMessage = { id, userId, content, type, fileUrl, duration, timestamp: new Date() };
 
     // Save to DB
     await Room.updateOne(
@@ -203,6 +224,17 @@ app.get('/api/room/:roomId', async (req, res) => {
     res.json({ code: '', language: 'javascript', messages: [] });
   }
 });
+
+app.post('/api/upload-file', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
+  }
+  const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+  res.json({ fileUrl });
+});
+
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
