@@ -17,14 +17,14 @@ Following the TODO_deployment.md plan to deploy backend to Render.com and fronte
 
 ### 2. Deploy Backend to Render
 - [x] Ensure GitHub repo exists and is pushed (done)
-- [ ] Connect Render to GitHub repo
-- [ ] Set MONGODB_URI environment variable in Render (use: mongodb+srv://codeconnect_user:Sunil12345%40@cluster0.h2bkilz.mongodb.net/codeconnect?retryWrites=true&w=majority&appName=Cluster0)
-- [ ] Deploy backend service
-- [ ] Note the deployed backend URL (e.g., https://codeconnect-backend.onrender.com)
+- [x] Connect Render to GitHub repo (done)
+- [x] Set MONGODB_URI environment variable in Render (done)
+- [x] Deploy backend service (done)
+- [x] Note the deployed backend URL: https://codeconnect-backend-kumh.onrender.com
 
 ### 3. Update Frontend Deployment on Vercel
-- [ ] Add REACT_APP_BACKEND_URL environment variable in Vercel dashboard
-- [ ] Redeploy frontend
+- [x] Add REACT_APP_BACKEND_URL environment variable in Vercel dashboard (set to https://codeconnect-backend-kumh.onrender.com)
+- [x] Redeploy frontend (pushed to GitHub, Vercel auto-deploys)
 
 ### 4. Test Deployment
 - [ ] Visit https://codeconnect-zeta-pied.vercel.app/
@@ -32,5 +32,5 @@ Following the TODO_deployment.md plan to deploy backend to Render.com and fronte
 - [ ] Check console for Socket.io connection
 
 ## Notes
-- Backend URL: To be determined after Render deployment
+- Backend URL: https://codeconnect-backend-kumh.onrender.com
 - Frontend URL: https://codeconnect-zeta-pied.vercel.app
