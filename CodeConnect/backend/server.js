@@ -14,14 +14,18 @@ const io = socketIo(server, {
   cors: {
     origin: ["http://localhost:3000", "http://localhost:3001", "https://codeconnect-zeta-pied.vercel.app", "https://codeconnect-frontend.vercel.app"], // Frontend URL
     methods: ["GET", "POST"],
-    credentials: true
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"]
   }
 });
 
 app.use(cors({
   origin: ["http://localhost:3000", "http://localhost:3001", "https://codeconnect-zeta-pied.vercel.app", "https://codeconnect-frontend.vercel.app"], // allow frontend
   methods: ["GET", "POST"],
-  credentials: true
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
+  exposedHeaders: ["Access-Control-Allow-Origin"],
+  optionsSuccessStatus: 200
 }));
 app.use(express.json());
 // app.use(express.static('../frontend/build')); // Serve React build later - commented for separate deployment
@@ -80,6 +84,12 @@ const activeRooms = new Map(); // roomId -> Set of userIds (socket.ids)
 function generateRoomId() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
+
+// Logging middleware for Socket.IO requests
+app.use('/socket.io', (req, res, next) => {
+  console.log(`Socket.IO request from origin: ${req.headers.origin}, method: ${req.method}, path: ${req.path}`);
+  next();
+});
 
 // Socket.IO Connection
 io.on('connection', (socket) => {
