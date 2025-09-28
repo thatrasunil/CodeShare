@@ -13,11 +13,16 @@ const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
     origin: ["http://localhost:3000", "http://localhost:3001", "https://codeconnect-zeta-pied.vercel.app"], // Frontend URL
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:3000", "http://localhost:3001", "https://codeconnect-zeta-pied.vercel.app"], // allow frontend
+  methods: ["GET", "POST"],
+  credentials: true
+}));
 app.use(express.json());
 // app.use(express.static('../frontend/build')); // Serve React build later - commented for separate deployment
 
