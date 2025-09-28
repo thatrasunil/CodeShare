@@ -27,6 +27,8 @@ Following the TODO_deployment.md plan to deploy backend to Render.com and fronte
 - [x] Redeploy frontend (pushed to GitHub, Vercel auto-deploys)
 
 ### 4. Test Deployment
+- [x] Fixed CORS issue by adding credentials: true to Express and Socket.IO CORS configs
+- [x] Pushed changes to GitHub, Render auto-redeploying backend
 - [ ] Visit https://codeconnect-zeta-pied.vercel.app/
 - [ ] Create/join room, verify real-time sync, chat, no 404 errors
 - [ ] Check console for Socket.io connection
