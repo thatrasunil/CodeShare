@@ -16,9 +16,9 @@ Following the TODO_deployment.md plan to deploy backend to Render.com and fronte
 - [x] Whitelist IP 0.0.0.0/0 in Network Access (done)
 
 ### 2. Deploy Backend to Render
-- [ ] Ensure GitHub repo exists and is pushed
+- [x] Ensure GitHub repo exists and is pushed (done)
 - [ ] Connect Render to GitHub repo
-- [ ] Set MONGODB_URI environment variable in Render
+- [ ] Set MONGODB_URI environment variable in Render (use: mongodb+srv://codeconnect_user:Sunil12345%40@cluster0.h2bkilz.mongodb.net/codeconnect?retryWrites=true&w=majority&appName=Cluster0)
 - [ ] Deploy backend service
 - [ ] Note the deployed backend URL (e.g., https://codeconnect-backend.onrender.com)
 
