@@ -256,6 +256,11 @@ app.post('/api/upload-file', upload.single('file'), (req, res) => {
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Health check route
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
