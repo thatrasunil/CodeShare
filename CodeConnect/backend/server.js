@@ -210,25 +210,30 @@ io.on('connection', (socket) => {
   // Disconnect
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
-    
+
+    const userId = socketIdToUserId.get(socket.id);
+
     // Remove from all rooms the socket was in
     for (const roomId of socket.rooms) {
       if (activeRooms.has(roomId) && roomId !== socket.id) { // Ignore the default room
-        activeRooms.get(roomId).delete(socket.id);
+        activeRooms.get(roomId).delete(userId);
         const newCount = activeRooms.get(roomId).size;
-        
+
         // Broadcast updated count to remaining users in room
         io.to(roomId).emit('user-count', newCount);
-        
+
         // Emit user-left to remaining users
-        socket.to(roomId).emit('user-left', socket.id);
-        
+        socket.to(roomId).emit('user-left', userId);
+
         // Clean up empty rooms
         if (newCount === 0) {
           activeRooms.delete(roomId);
         }
       }
     }
+
+    // Clean up the mapping
+    socketIdToUserId.delete(socket.id);
   });
 });
 
