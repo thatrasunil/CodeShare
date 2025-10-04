@@ -78,7 +78,8 @@ const roomSchema = new mongoose.Schema({
 const Room = mongoose.model('Room', roomSchema);
 
 // Track active users per room (in-memory for real-time)
-const activeRooms = new Map(); // roomId -> Set of userIds (socket.ids)
+const activeRooms = new Map(); // roomId -> Set of userIds
+const socketIdToUserId = new Map(); // socket.id -> userId
 
 // Generate unique room ID
 function generateRoomId() {
@@ -99,6 +100,9 @@ io.on('connection', (socket) => {
   socket.on('join-room', async (roomId, userId) => {
     socket.join(roomId);
     console.log(`User ${socket.id} joined room ${roomId}`);
+
+    // Store mapping from socket.id to userId
+    socketIdToUserId.set(socket.id, userId);
 
     // Initialize active users set for room if not exists
     if (!activeRooms.has(roomId)) {
